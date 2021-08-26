@@ -190,12 +190,18 @@ def cal_loss(A2B_G_model, B2A_G_model, A_discriminator, B_discriminator,
         
         f_A_x_, f_A_y = tf.image.image_gradients(tf.nn.tanh(fake_A_[:, :, :, 0:3]))
         f_A_m_ = tf.add(tf.abs(f_A_x_), tf.abs(f_A_y))
+        f_A_m_low = tf.abs(tf.nn.tanh(fake_A_[:, :, :, 0:3]) - f_A_m_)
+        r_A_m_los = tf.abs(A_batch_images - r_A_m)
 
         f_B_x_, f_B_y = tf.image.image_gradients(tf.nn.tanh(fake_B_[:, :, :, 0:3]))
         f_B_m_ = tf.add(tf.abs(f_B_x_), tf.abs(f_B_y))
+        f_B_m_low = tf.abs(tf.nn.tanh(fake_B_[:, :, :, 0:3]) - f_B_m_)
+        r_B_m_los = tf.abs(B_batch_images - r_B_m)
 
         Cycle_loss = (tf.reduce_mean(tf.abs(f_A_m_ - r_A_m))) \
-            * 5.0 + (tf.reduce_mean(tf.abs(f_B_m_ - r_B_m))) * 5.0
+            * 5.0 + (tf.reduce_mean(tf.abs(f_B_m_ - r_B_m))) * 5.0 \
+            + 5.0 + (tf.reduce_mean(tf.abs(f_A_m_low - r_A_m_los))) \
+            + 5.0 * (tf.reduce_mean(tf.abs(f_B_m_low - r_B_m_los)))
         ################## high freqency 만을 이용 ##################       # style 이라고 가정
 
         G_gan_loss = tf.reduce_mean((DB_fake - tf.ones_like(DB_fake))**2) \
@@ -297,12 +303,18 @@ def cal_loss(A2B_G_model, B2A_G_model, A_discriminator, B_discriminator,
         
         f_A_x_, f_A_y = tf.image.image_gradients(tf.nn.tanh(fake_A_[:, :, :, 0:3]))
         f_A_m_ = tf.add(tf.abs(f_A_x_), tf.abs(f_A_y))
+        f_A_m_low = tf.abs(tf.nn.tanh(fake_A_[:, :, :, 0:3]) - f_A_m_)
+        r_A_m_los = tf.abs(A_batch_images - r_A_m)
 
         f_B_x_, f_B_y = tf.image.image_gradients(tf.nn.tanh(fake_B_[:, :, :, 0:3]))
         f_B_m_ = tf.add(tf.abs(f_B_x_), tf.abs(f_B_y))
+        f_B_m_low = tf.abs(tf.nn.tanh(fake_B_[:, :, :, 0:3]) - f_B_m_)
+        r_B_m_los = tf.abs(B_batch_images - r_B_m)
 
         Cycle_loss = (tf.reduce_mean(tf.abs(f_A_m_ - r_A_m))) \
-            * 5.0 + (tf.reduce_mean(tf.abs(f_B_m_ - r_B_m))) * 5.0
+            * 5.0 + (tf.reduce_mean(tf.abs(f_B_m_ - r_B_m))) * 5.0 \
+            + 5.0 + (tf.reduce_mean(tf.abs(f_A_m_low - r_A_m_los))) \
+            + 5.0 * (tf.reduce_mean(tf.abs(f_B_m_low - r_B_m_los)))
         ################## high freqency 만을 이용 ##################       # style 이라고 가정
 
         G_gan_loss = tf.reduce_mean((DB_fake - tf.ones_like(DB_fake))**2) \
