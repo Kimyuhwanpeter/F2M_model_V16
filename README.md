@@ -7,4 +7,8 @@
 
 ## 실험 1 (서브컴)
 * 입력에서 생성된 영상을 후처리 한 결과 (나이 성능은 원본 및 후처리 결과를 따로 측정해봐야 함)
+![f1](https://github.com/Kimyuhwanpeter/F2M_model_V16/blob/main/Figure_1.png)
+<br/>
 
+* Sharpening filter는 아래와 같이 사용
+![f2](https://github.com/Kimyuhwanpeter/F2M_model_V16/blob/main/Figure_2.png)
